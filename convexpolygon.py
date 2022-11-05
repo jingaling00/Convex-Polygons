@@ -51,15 +51,15 @@ class ConvexPolygon:
                 vector = V(self.verts[i+1], self.verts[i])
                 self.edges.append(vector)
             
-        orient_sum = 0
-        for point in self.verts:
-             a = self.verts[0]
-             b = self.verts[1]
-             for i in range(0, self.nverts):
-                 orient = orient2d(a, b, self.verts[i])
-                 orient_sum += orient
-        if math.fabs(orient_sum) != self.nverts - 2:
-            raise ValueError('Points do not form a convex polygon')
+        for i in range(self.nverts):
+            orient_sum = 0
+            for j in range(self.nverts):
+                orient = orient2d(self.verts[i], self.verts[(i+1) % self.nverts], self.verts[j])
+                orient_sum += orient
+            if math.fabs(orient_sum) != self.nverts - 2:
+                raise ValueError('Points do not form a convex polygon')
+            else:
+                continue
                      
     def __str__(self):
         verts = []
@@ -184,4 +184,4 @@ class ConvexPolygon:
                 continue
         
         return True
-        
+    
