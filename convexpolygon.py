@@ -45,10 +45,10 @@ class ConvexPolygon:
         
         for i in range(0, self.nverts):
             if i == self.nverts - 1:
-                vector = V(self.verts[0], self.verts[i])
+                vector = V(self.verts[i], self.verts[0])
                 self.edges.append(vector)
             else:
-                vector = V(self.verts[i+1], self.verts[i])
+                vector = V(self.verts[i], self.verts[i+1])
                 self.edges.append(vector)
             
         for i in range(self.nverts):
@@ -129,10 +129,10 @@ class ConvexPolygon:
         self.edges = []
         for i in range(0, self.nverts):
             if i == self.nverts - 1:
-                vector = V(self.verts[0], self.verts[i])
+                vector = V(self.verts[i], self.verts[0])
                 self.edges.append(vector)
             else:
-                vector = V(self.verts[i+1], self.verts[i])
+                vector = V(self.verts[i], self.verts[i+1])
                 self.edges.append(vector)   
         
     def scale(self, sx, sy):
@@ -148,10 +148,10 @@ class ConvexPolygon:
         self.edges = []
         for i in range(0, self.nverts):
             if (i+1) == self.nverts:
-                vector = V(self.verts[0], self.verts[i])
+                vector = V(self.verts[i], self.verts[0])
                 self.edges.append(vector)
             else:
-                vector = V(self.verts[i+1], self.verts[i])
+                vector = V(self.verts[i], self.verts[i+1])
                 self.edges.append(vector)
     
     def __and__(self, other):
@@ -184,4 +184,3 @@ class ConvexPolygon:
                 continue
         
         return True
-    
