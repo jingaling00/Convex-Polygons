@@ -58,7 +58,7 @@ class ConvexPolygon:
              for i in range(0, self.nverts):
                  orient = orient2d(a, b, self.verts[i])
                  orient_sum += orient
-        if orient_sum != self.nverts - 2:
+        if math.fabs(orient_sum) != self.nverts - 2:
             raise ValueError('Points do not form a convex polygon')
                      
     def __str__(self):
@@ -184,3 +184,4 @@ class ConvexPolygon:
                 continue
         
         return True
+        
