@@ -38,17 +38,23 @@ class Vec2D(Point):
             self.y = y
             self.final = Point(x, y)
         elif isinstance(x, Point) and isinstance(y, Point):
-            self.x = x.x - y.x
-            self.y = x.y - y.y
+            self.x = y.x - x.x
+            self.y = y.y - x.y
             self.final = Point(self.x, self.y)
     def __str__(self):
         return f'{self.final}'
     def __add__(self, other):
-        return Point.__add__(self, other)
+        new_x = self.x + other.x
+        new_y = self.y + other.y
+        new_vec = Vec2D(new_x, new_y)
+        return new_vec
     def __sub__(self, other):
-        return Point.__sub__(self, other)
+        new_x = self.x - other.x
+        new_y = self.y - other.y
+        new_vec = Vec2D(new_x, new_y)
+        return new_vec
     def __mul__(self, other):
-        if isinstance(self, Vec2D) and isinstance(other, Vec2D):
+        if isinstance(self, Vec2D) or isinstance(other, Vec2D):
             dot = self.x * other.x + self.y * other.y
             return dot
         elif isinstance(other, int):
@@ -57,6 +63,3 @@ class Vec2D(Point):
     def norm(self):
         norm = ((self.x**2)+(self.y**2)) ** 0.5
         return norm
-    
-        
-    
