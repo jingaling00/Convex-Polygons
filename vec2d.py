@@ -49,8 +49,8 @@ class Vec2D(Point):
         new_vec = Vec2D(new_x, new_y)
         return new_vec
     def __sub__(self, other):
-        new_x = other.x - self.x
-        new_y = other.y - self.y
+        new_x = self.x - other.x
+        new_y = self.y - other.y
         new_vec = Vec2D(new_x, new_y)
         return new_vec
     def __mul__(self, other):
@@ -66,6 +66,3 @@ class Vec2D(Point):
     def norm(self):
         norm = ((self.x**2)+(self.y**2)) ** 0.5
         return norm
-    
-        
-    
