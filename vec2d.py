@@ -66,3 +66,4 @@ class Vec2D(Point):
     def norm(self):
         norm = ((self.x**2)+(self.y**2)) ** 0.5
         return norm
+    
