@@ -49,17 +49,23 @@ class Vec2D(Point):
         new_vec = Vec2D(new_x, new_y)
         return new_vec
     def __sub__(self, other):
-        new_x = self.x - other.x
-        new_y = self.y - other.y
+        new_x = other.x - self.x
+        new_y = other.y - self.y
         new_vec = Vec2D(new_x, new_y)
         return new_vec
     def __mul__(self, other):
-        if isinstance(self, Vec2D) or isinstance(other, Vec2D):
+        if (isinstance(self, Vec2D) or isinstance(self, Point)) and (isinstance(other, Vec2D) or isinstance(other, Point)):
             dot = self.x * other.x + self.y * other.y
             return dot
-        elif isinstance(other, int):
-            scaled = Vec2D(self.x * other, self.y *other)
+        elif isinstance(self, int) or isinstance(self, float):
+            scaled = Vec2D(self * other.x, self * other.y)
+            return scaled
+        elif isinstance(other, int) or isinstance(other, float):
+            scaled = Vec2D(self.x * other, self.y * other)
             return scaled
     def norm(self):
         norm = ((self.x**2)+(self.y**2)) ** 0.5
         return norm
+    
+        
+    
