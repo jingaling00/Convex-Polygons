@@ -6,32 +6,87 @@ Created on Mon Oct 31 11:37:08 2022
 """
 
 class Point:
+    """
+    Creates points in a Cartesian plane and 
+    manipulates multiple points in various arithmetic methods.
+    """
     def __init__(self, x=0, y=0):
+        """ Default Point at (0,0) """
         self.x = x
         self.y = y
     def __str__(self):
+        """
+        Returns
+        -------
+        string : Composition of the point in a formatted manner.
+
+        """
         string = f'x: {self.x} y: {self.y}'
         return string
     def __add__(self, other):
+        """
+        Parameters
+        ----------
+        self, other: two Point objects.
+
+        Returns
+        -------
+        new_point : overloads + operator to sum the components of the Point objects.
+
+        """
         new_x = self.x + other.x
         new_y = self.y + other.y
         new_point = Point(new_x, new_y)
         return new_point
     def __iadd__(self, other):
+        """
+        Parameters
+        ----------
+        self, other: two Point objects.
+
+        Returns
+        -------
+        Overloads += operator to sum components of Point objects.
+
+        """
         self.x += other.x
         self.y += other.y
         return self
     def __sub__(self, other):
+        """
+        Parameters
+        ----------
+        self, other: two Point objects.
+
+        Returns
+        -------
+        Overloads - operator to find difference of components of Point objects.
+
+        """
         new_x = self.x - other.x
         new_y = self.y - other.y
         new_point = Point(new_x, new_y)
         return new_point
     def __isub__(self, other):
+        """
+        Parameters
+        ----------
+        self, other: two Point objects.
+
+        Returns
+        -------
+        Overloads -= operator to find difference of components of Point objects.
+
+        """
         self.x -= other.x
         self.y -= other.y
         return self
 
 class Vec2D(Point):
+    """
+    Creates vectors in a 2D Cartesian plane and 
+    manipulates multiple points in various arithmetic methods.
+    """
     def __init__(self, x=Point(), y=Point()):
         if (isinstance(x, int) or isinstance(x, float)) and (isinstance(y, int) or isinstance(y, float)):
             self.x = x
@@ -66,6 +121,3 @@ class Vec2D(Point):
     def norm(self):
         norm = ((self.x**2)+(self.y**2)) ** 0.5
         return norm
-    
-        
-    
