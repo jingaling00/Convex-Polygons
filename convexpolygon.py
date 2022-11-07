@@ -47,23 +47,23 @@ class ConvexPolygon:
         if len(self.verts) < 3:
             raise ValueError('Points do not form a convex polygon')
         
-        self.number_verts = len(self.verts)
+        self.nverts = len(self.verts)
             
-        for i in range(0, self.number_verts):
-            if i == self.number_verts - 1:
+        for i in range(0, self.nverts):
+            if i == self.nverts - 1:
                 vector = V(self.verts[i], self.verts[0])
                 self.edges.append(vector)
             else:
                 vector = V(self.verts[i], self.verts[i+1])
                 self.edges.append(vector)
         
-        for i in range(self.number_verts):
+        for i in range(self.nverts):
             orient_sum = 0
-            for j in range(self.number_verts):
-                orient = orient2d(self.verts[i], self.verts[(i+1) % self.number_verts], self.verts[j])
+            for j in range(self.nverts):
+                orient = orient2d(self.verts[i], self.verts[(i+1) % self.nverts], self.verts[j])
                 orient_sum += orient
                 
-            if math.fabs(orient_sum) != self.number_verts - 2:
+            if math.fabs(orient_sum) != self.nverts - 2:
                 raise ValueError('Points do not form a convex polygon')
                      
     def __str__(self):
@@ -76,7 +76,7 @@ class ConvexPolygon:
         for i in self.edges:
             edges.append(V.__str__(i))
         edges_str = ', '.join(edges)
-        return f'No. of Vertices: {self.number_verts}\nVertices {vert_str}\nEdges {edges_str}'
+        return f'No. of Vertices: {self.nverts}\nVertices {vert_str}\nEdges {edges_str}'
 
     def translate(self, vec2d):
         new_verts = []
@@ -90,8 +90,8 @@ class ConvexPolygon:
         cx = 0
         cy = 0
         
-        for i in range(0, self.number_verts):
-            if (i+1) == self.number_verts:
+        for i in range(0, self.nverts):
+            if (i+1) == self.nverts:
                 a_mult = (self.verts[i].x * self.verts[0].y) - (self.verts[0].x * self.verts[i].y)
                 cx_mult = (self.verts[i].x + self.verts[0].x) * ((self.verts[i].x * self.verts[0].y) - (self.verts[0].x * self.verts[i].y))
                 cy_mult = (self.verts[i].y + self.verts[0].y) * ((self.verts[i].x * self.verts[0].y) - (self.verts[0].x * self.verts[i].y))
@@ -125,8 +125,8 @@ class ConvexPolygon:
         self.verts = verts
         
         self.edges = []
-        for i in range(0, self.number_verts):
-            if i == self.number_verts - 1:
+        for i in range(0, self.nverts):
+            if i == self.nverts - 1:
                 vector = V(self.verts[i], self.verts[0])
                 self.edges.append(vector)
             else:
@@ -144,8 +144,8 @@ class ConvexPolygon:
         self.verts = verts
         
         self.edges = []
-        for i in range(0, self.number_verts):
-            if (i+1) == self.number_verts:
+        for i in range(0, self.nverts):
+            if (i+1) == self.nverts:
                 vector = V(self.verts[i], self.verts[0])
                 self.edges.append(vector)
             else:
@@ -180,3 +180,4 @@ class ConvexPolygon:
                 return False
         
         return True
+    
