@@ -24,42 +24,49 @@ def orient2d(a, b, c):
         and 0 if collinear
         
     '''
-
     # Signed area of triangle formed by a,b,c
     s_a = (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y)
     
     # Orientation
-    result = 1 if s_a > 0 else -1 if s_a < 0 else 0
+    if s_a > 0:
+        result = 1
+    elif s_a < 0:
+        result = -1
+    else:
+        result = 0
     
     return result
 
 class ConvexPolygon:
     def __init__(self, points=[]):
-        self.nverts = len(points)
-        if self.nverts < 3:
-            raise ValueError('Points do not form a convex polygon')
         
         self.verts = points
         
         self.edges = []
         
-        for i in range(0, self.nverts):
-            if i == self.nverts - 1:
+        if len(self.verts) < 3:
+            raise ValueError('Points do not form a convex polygon')
+        
+        self.number_verts = len(self.verts)
+            
+        for i in range(0, self.number_verts):
+            if i == self.number_verts - 1:
                 vector = V(self.verts[i], self.verts[0])
                 self.edges.append(vector)
             else:
                 vector = V(self.verts[i], self.verts[i+1])
                 self.edges.append(vector)
-            
-        for i in range(self.nverts):
-            orient_sum = 0
-            for j in range(self.nverts):
-                orient = orient2d(self.verts[i], self.verts[(i+1) % self.nverts], self.verts[j])
-                orient_sum += orient
-            if math.fabs(orient_sum) != self.nverts - 2:
+
+        first_vert = self.verts[0]
+        sec_vert = self.verts[1]
+        third_vert = self.verts[2]
+        
+        orient_test = orient2d(first_vert, sec_vert, third_vert)
+        
+        for j in range(3, self.number_verts-1):
+            orient = orient2d(first_vert, sec_vert, self.verts[j % self.number_verts])
+            if orient == 0 or orient * orient_test == -1 :
                 raise ValueError('Points do not form a convex polygon')
-            else:
-                continue
                      
     def __str__(self):
         verts = []
@@ -71,7 +78,7 @@ class ConvexPolygon:
         for i in self.edges:
             edges.append(V.__str__(i))
         edges_str = ', '.join(edges)
-        return f'No. of Vertices: {self.nverts}\nVertices {vert_str}\nEdges {edges_str}'
+        return f'No. of Vertices: {self.number_verts}\nVertices {vert_str}\nEdges {edges_str}'
 
     def translate(self, vec2d):
         new_verts = []
@@ -79,39 +86,32 @@ class ConvexPolygon:
             n += vec2d
             new_verts.append(n)
         self.verts = new_verts
-        
     
-    def centroid(self):
+    def centroid(self): # make one loop
         a = 0
-        for i in range(0, self.nverts):
-            if (i+1) == self.nverts:
-                vertex_mult = (self.verts[i].x * self.verts[0].y) - (self.verts[0].x * self.verts[i].y)
-            else:
-                vertex_mult = (self.verts[i].x * self.verts[i+1].y) - (self.verts[i+1].x * self.verts[i].y)
-            a += vertex_mult
-        a *= 0.5
-        
         cx = 0
-        for i in range(0, self.nverts):
-            if (i+1) == self.nverts:
-                vertex_mult = (self.verts[i].x + self.verts[0].x) * ((self.verts[i].x * self.verts[0].y) - (self.verts[0].x * self.verts[i].y))
-            else:   
-                vertex_mult = (self.verts[i].x + self.verts[i+1].x) * ((self.verts[i].x * self.verts[i+1].y) - (self.verts[i+1].x * self.verts[i].y))
-            cx += vertex_mult
-        cx /= (6 * a)
-        
         cy = 0
-        for i in range(0, self.nverts):
-            if (i+1) == self.nverts:
-                vertex_mult = (self.verts[i].y + self.verts[0].y) * ((self.verts[i].x * self.verts[0].y) - (self.verts[0].x * self.verts[i].y))
+        
+        for i in range(0, self.number_verts):
+            if (i+1) == self.number_verts:
+                a_mult = (self.verts[i].x * self.verts[0].y) - (self.verts[0].x * self.verts[i].y)
+                cx_mult = (self.verts[i].x + self.verts[0].x) * ((self.verts[i].x * self.verts[0].y) - (self.verts[0].x * self.verts[i].y))
+                cy_mult = (self.verts[i].y + self.verts[0].y) * ((self.verts[i].x * self.verts[0].y) - (self.verts[0].x * self.verts[i].y))
+
             else:
-                vertex_mult = (self.verts[i].y + self.verts[i+1].y) * ((self.verts[i].x * self.verts[i+1].y) - (self.verts[i+1].x * self.verts[i].y))
-            cy += vertex_mult
+                a_mult = (self.verts[i].x * self.verts[i+1].y) - (self.verts[i+1].x * self.verts[i].y)
+                cx_mult = (self.verts[i].x + self.verts[i+1].x) * ((self.verts[i].x * self.verts[i+1].y) - (self.verts[i+1].x * self.verts[i].y))
+                cy_mult = (self.verts[i].y + self.verts[i+1].y) * ((self.verts[i].x * self.verts[i+1].y) - (self.verts[i+1].x * self.verts[i].y))
+
+            a += a_mult
+            cx += cx_mult
+            cy += cy_mult
+
+        a *= 0.5
+        cx /= (6 * a)
         cy /= (6 * a)
         
-        centroid = P(cx, cy)
-        
-        return centroid
+        return P(cx, cy)
     
     def rotate(self, angle, pivot=0):
         if pivot == 0:
@@ -127,7 +127,7 @@ class ConvexPolygon:
         self.verts = verts
         
         self.edges = []
-        for i in range(0, self.nverts):
+        for i in range(0, self.number_verts):
             if i == self.nverts - 1:
                 vector = V(self.verts[i], self.verts[0])
                 self.edges.append(vector)
@@ -146,8 +146,8 @@ class ConvexPolygon:
         self.verts = verts
         
         self.edges = []
-        for i in range(0, self.nverts):
-            if (i+1) == self.nverts:
+        for i in range(0, self.number_verts):
+            if (i+1) == self.number_verts:
                 vector = V(self.verts[i], self.verts[0])
                 self.edges.append(vector)
             else:
@@ -180,7 +180,5 @@ class ConvexPolygon:
             
             if max_A < min_B or max_B < min_A:
                 return False
-            else:
-                continue
         
         return True
