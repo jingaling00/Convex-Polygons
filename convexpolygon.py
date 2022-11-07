@@ -60,7 +60,7 @@ class ConvexPolygon:
         for i in range(self.number_verts-1):
             orient_sum = 0
             for j in range(self.number_verts):
-                orient = orient2d(self.verts[i], self.verts[i+1], self.verts[j % self.number_verts])
+                orient = orient2d(self.verts[i], self.verts[(i+1) % self.number_verts], self.verts[j % self.number_verts])
                 orient_sum += orient
                 
             if orient_sum != self.number_verts - 2:
