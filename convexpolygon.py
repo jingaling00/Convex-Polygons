@@ -57,7 +57,7 @@ class ConvexPolygon:
                 vector = V(self.verts[i], self.verts[i+1])
                 self.edges.append(vector)
         
-        for i in range(self.number_verts):
+        for i in range(self.number_verts-1):
             orient_sum = 0
             for j in range(self.number_verts):
                 orient = orient2d(self.verts[i], self.verts[i+1], self.verts[j % self.number_verts])
