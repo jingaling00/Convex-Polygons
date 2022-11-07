@@ -107,8 +107,8 @@ class Vec2D(Point):
             self.y = y
             self.final = Point(x, y)
         elif isinstance(x, Point) and isinstance(y, Point):
-            self.x = x.x - y.x
-            self.y = x.y - y.y
+            self.x = y.x - x.x
+            self.y = y.y - x.y
             self.final = Point(self.x, self.y)
     
     def __add__(self, other):
