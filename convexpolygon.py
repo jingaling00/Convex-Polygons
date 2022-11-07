@@ -56,16 +56,14 @@ class ConvexPolygon:
             else:
                 vector = V(self.verts[i], self.verts[i+1])
                 self.edges.append(vector)
-
-        first_vert = self.verts[0]
-        sec_vert = self.verts[1]
-        third_vert = self.verts[2]
         
-        orient_test = orient2d(first_vert, sec_vert, third_vert)
-        
-        for j in range(3, self.number_verts-1):
-            orient = orient2d(first_vert, sec_vert, self.verts[j % self.number_verts])
-            if orient == 0 or orient * orient_test == -1 :
+        for i in range(self.number_verts):
+            orient_sum = 0
+            for j in range(self.number_verts):
+                orient = orient2d(self.verts[i], self.verts[i+1], self.verts[j % self.number_verts])
+                orient_sum += orient
+                
+            if orient_sum != self.number_verts - 2:
                 raise ValueError('Points do not form a convex polygon')
                      
     def __str__(self):
