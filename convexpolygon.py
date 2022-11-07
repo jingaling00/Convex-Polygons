@@ -126,7 +126,7 @@ class ConvexPolygon:
         
         self.edges = []
         for i in range(0, self.number_verts):
-            if i == self.nverts - 1:
+            if i == self.number_verts - 1:
                 vector = V(self.verts[i], self.verts[0])
                 self.edges.append(vector)
             else:
